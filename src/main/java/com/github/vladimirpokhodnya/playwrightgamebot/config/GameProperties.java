@@ -1,4 +1,4 @@
-package com.github.vladimirpokhodnya.playwrightgameboot.config;
+package com.github.vladimirpokhodnya.playwrightgamebot.config;
 
 import lombok.Getter;
 import lombok.Setter;

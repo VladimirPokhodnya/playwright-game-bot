@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.vladimirpokhodnya</groupId>
-    <artifactId>playwright-game-boot</artifactId>
+    <artifactId>playwright-game-bot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>playwright-game-boot</name>
-    <description>playwright-game-boot</description>
+    <name>playwright-game-bot</name>
+    <description>playwright-game-bot</description>
     <url/>
     <licenses>
         <license/>
