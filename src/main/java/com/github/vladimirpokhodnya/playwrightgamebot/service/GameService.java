@@ -9,6 +9,7 @@ import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
@@ -16,39 +17,46 @@ import java.nio.file.Paths;
 public class GameService {
 
     private final GameProperties properties;
+    private final Playwright playwright;
+    private final Path cookiesPath;
 
-    public GameService(GameProperties properties) {
+    public GameService(GameProperties properties, Playwright playwright) {
         this.properties = properties;
+        this.playwright = playwright;
+        this.cookiesPath = Path.of(properties.getCookies());
         authentication();
     }
 
     private void authentication() {
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                    .setHeadless(true));
-            BrowserContext context = browser.newContext();
+        try (Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
+            BrowserContext context = browser.newContext(
+                    new Browser.NewContextOptions().setStorageStatePath(cookiesPath));
             Page page = context.newPage();
             page.navigate(properties.getHost());
-            page.getByLabel("E-mail:").click();
-            page.getByLabel("E-mail:").fill(properties.getUsername());
-            page.getByLabel("Пароль:").click();
-            page.getByLabel("Пароль:").fill(properties.getPassword());
-            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Войти")).click();
+            if (page.url().equals(properties.getHost())) {
+                page.getByLabel("E-mail:").click();
+                page.getByLabel("E-mail:").fill(properties.getUsername());
+                page.getByLabel("Пароль:").click();
+                page.getByLabel("Пароль:").fill(properties.getPassword());
+                page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Войти")).click();
 
-            context.storageState(new BrowserContext.StorageStateOptions().setPath(Paths.get(".auth/state.json")));
+                context.storageState(new BrowserContext.StorageStateOptions().setPath(cookiesPath));
+            }
         }
     }
 
     public void screenshot() {
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                    .setHeadless(true));
+        try (Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
             BrowserContext context = browser.newContext(
-                    new Browser.NewContextOptions().setStorageStatePath(Paths.get(".auth/state.json")));
+                    new Browser.NewContextOptions().setStorageStatePath(cookiesPath));
 
             Page page = context.newPage();
             page.navigate(properties.getHost());
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("example.png")));
         }
+    }
+
+    public void closeGame() {
+        playwright.close();
     }
 }

@@ -10,6 +10,7 @@ public class GameProperties {
     String host;
     String username;
     String password;
+    String cookies;
 
     public String getHost() {
         return host;
@@ -33,5 +34,13 @@ public class GameProperties {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(String cookies) {
+        this.cookies = cookies;
     }
 }

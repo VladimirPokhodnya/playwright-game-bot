@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 @SpringBootApplication
 public class PlaywrightGameBootApplication implements CommandLineRunner {
 
@@ -21,5 +22,7 @@ public class PlaywrightGameBootApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         gameService.screenshot();
+        System.out.println("Скриншот сохранён");
+        gameService.closeGame();
     }
 }
