@@ -23,6 +23,6 @@ public class PlaywrightGameBootApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         gameService.screenshot();
         System.out.println("Скриншот сохранён");
-        gameService.closeGame();
+        gameService.closePlaywright();
     }
 }

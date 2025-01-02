@@ -9,6 +9,7 @@ import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -29,8 +30,13 @@ public class GameService {
 
     private void authentication() {
         try (Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
-            BrowserContext context = browser.newContext(
-                    new Browser.NewContextOptions().setStorageStatePath(cookiesPath));
+            BrowserContext context;
+            if (Files.exists(cookiesPath)) {
+                context = browser.newContext(
+                        new Browser.NewContextOptions().setStorageStatePath(cookiesPath));
+            } else {
+                context = browser.newContext();
+            }
             Page page = context.newPage();
             page.navigate(properties.getHost());
             if (page.url().equals(properties.getHost())) {
@@ -56,7 +62,7 @@ public class GameService {
         }
     }
 
-    public void closeGame() {
+    public void closePlaywright() {
         playwright.close();
     }
 }
