@@ -1,8 +1,6 @@
 package com.github.vladimirpokhodnya.playwrightgamebot.config;
 
-import com.github.vladimirpokhodnya.playwrightgamebot.service.GameLogin;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 

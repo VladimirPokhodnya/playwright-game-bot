@@ -13,13 +13,16 @@ import java.nio.file.Paths;
 
 
 @Service
-public class GameLogin {
+public class GameService {
 
-    public GameLogin(GameProperties properties) {
-        authentication(properties);
+    private final GameProperties properties;
+
+    public GameService(GameProperties properties) {
+        this.properties = properties;
+        authentication();
     }
 
-    private void authentication(GameProperties properties) {
+    private void authentication() {
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
                     .setHeadless(true));
@@ -32,6 +35,19 @@ public class GameLogin {
             page.getByLabel("Пароль:").fill(properties.getPassword());
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Войти")).click();
 
+            context.storageState(new BrowserContext.StorageStateOptions().setPath(Paths.get(".auth/state.json")));
+        }
+    }
+
+    public void screenshot() {
+        try (Playwright playwright = Playwright.create()) {
+            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
+                    .setHeadless(true));
+            BrowserContext context = browser.newContext(
+                    new Browser.NewContextOptions().setStorageStatePath(Paths.get(".auth/state.json")));
+
+            Page page = context.newPage();
+            page.navigate(properties.getHost());
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("example.png")));
         }
     }
