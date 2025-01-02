@@ -35,4 +35,5 @@ build/
 ### Application ###
 .env*
 logs/
-
+.auth/
+example.png
