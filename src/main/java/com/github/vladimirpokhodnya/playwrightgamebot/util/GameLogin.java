@@ -1,27 +1,26 @@
-package com.github.vladimirpokhodnya.playwrightgamebot.service;
+package com.github.vladimirpokhodnya.playwrightgamebot.util;
 
-import com.github.vladimirpokhodnya.playwrightgamebot.config.LoginProperties;
+import com.github.vladimirpokhodnya.playwrightgamebot.config.GameProperties;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
-@Service
-public class LoginService {
+@Component
+public class GameLogin {
 
-    private final LoginProperties properties;
+    private final GameProperties properties;
     private final Playwright playwright;
     private final Path cookiesPath;
 
-    public LoginService(LoginProperties properties, Playwright playwright) {
+    public GameLogin(GameProperties properties, Playwright playwright) {
         this.properties = properties;
         this.playwright = playwright;
         this.cookiesPath = Path.of(properties.getCookies());
@@ -50,18 +49,4 @@ public class LoginService {
         }
     }
 
-    public void screenshot() {
-        try (Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
-            BrowserContext context = browser.newContext(
-                    new Browser.NewContextOptions().setStorageStatePath(cookiesPath));
-
-            Page page = context.newPage();
-            page.navigate(properties.getHost());
-            page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("example.png")));
-        }
-    }
-
-    public void closePlaywright() {
-        playwright.close();
-    }
 }

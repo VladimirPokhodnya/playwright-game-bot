@@ -1,6 +1,6 @@
 package com.github.vladimirpokhodnya.playwrightgamebot;
 
-import com.github.vladimirpokhodnya.playwrightgamebot.service.LoginService;
+import com.github.vladimirpokhodnya.playwrightgamebot.service.GameService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PlaywrightGameBootApplication implements CommandLineRunner {
 
-    private final LoginService loginService;
+    private final GameService gameService;
 
-    public PlaywrightGameBootApplication(LoginService loginService) {
-        this.loginService = loginService;
+    public PlaywrightGameBootApplication(GameService gameService) {
+        this.gameService = gameService;
     }
 
     public static void main(String[] args) {
@@ -21,9 +21,8 @@ public class PlaywrightGameBootApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        loginService.authentication();
-        loginService.screenshot();
+        gameService.screenshot("example.png");
         System.out.println("Скриншот сохранён");
-        loginService.closePlaywright();
+        gameService.closePlaywright();
     }
 }
