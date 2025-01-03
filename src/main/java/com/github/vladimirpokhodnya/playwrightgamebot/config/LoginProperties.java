@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@ConfigurationProperties(prefix = "game")
-public class GameProperties {
+@ConfigurationProperties(prefix = "login")
+public class LoginProperties {
     String host;
     String username;
     String password;

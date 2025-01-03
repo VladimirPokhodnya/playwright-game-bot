@@ -1,6 +1,6 @@
 package com.github.vladimirpokhodnya.playwrightgamebot.service;
 
-import com.github.vladimirpokhodnya.playwrightgamebot.config.GameProperties;
+import com.github.vladimirpokhodnya.playwrightgamebot.config.LoginProperties;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
@@ -15,20 +15,19 @@ import java.nio.file.Paths;
 
 
 @Service
-public class GameService {
+public class LoginService {
 
-    private final GameProperties properties;
+    private final LoginProperties properties;
     private final Playwright playwright;
     private final Path cookiesPath;
 
-    public GameService(GameProperties properties, Playwright playwright) {
+    public LoginService(LoginProperties properties, Playwright playwright) {
         this.properties = properties;
         this.playwright = playwright;
         this.cookiesPath = Path.of(properties.getCookies());
-        authentication();
     }
 
-    private void authentication() {
+    public void authentication() {
         try (Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
             BrowserContext context;
             if (Files.exists(cookiesPath)) {
