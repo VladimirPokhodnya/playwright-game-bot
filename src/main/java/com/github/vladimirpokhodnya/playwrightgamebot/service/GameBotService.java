@@ -1,7 +1,7 @@
 package com.github.vladimirpokhodnya.playwrightgamebot.service;
 
 import com.github.vladimirpokhodnya.playwrightgamebot.config.GameProperties;
-import com.github.vladimirpokhodnya.playwrightgamebot.util.GameLogin;
+import com.github.vladimirpokhodnya.playwrightgamebot.model.GameLocation;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
@@ -13,35 +13,35 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class GameService {
+public class GameBotService {
 
     private final Playwright playwright;
     private final GameProperties properties;
-    private final GameLogin gameLogin;
+    private final GameLoginService gameLoginService;
     private final Path cookiesPath;
 
-    public GameService(Playwright playwright, GameProperties properties, GameLogin gameLogin) {
+    public GameBotService(Playwright playwright, GameProperties properties, GameLoginService gameLoginService) {
         this.playwright = playwright;
         this.properties = properties;
         this.cookiesPath = Path.of(properties.getCookies());
-        this.gameLogin = gameLogin;
+        this.gameLoginService = gameLoginService;
     }
 
-    public void screenshot(String fileName) {
-        gameLogin.authentication();
+    public void screenshot(String fileName, GameLocation location) {
+        gameLoginService.authentication();
         try (Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
             BrowserContext context = browser.newContext(
                     new Browser.NewContextOptions().setStorageStatePath(cookiesPath));
 
             Page page = context.newPage();
-            page.navigate(properties.getHost());
+            page.setViewportSize(1000, 2560);
+            page.navigate(properties.getHost() + location.getName());
             page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get(fileName)));
         }
     }
 
-    public void closePlaywright() {
+    public void closeGameBot() {
         playwright.close();
     }
-
 
 }

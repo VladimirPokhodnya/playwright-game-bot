@@ -1,4 +1,4 @@
-package com.github.vladimirpokhodnya.playwrightgamebot.util;
+package com.github.vladimirpokhodnya.playwrightgamebot.service;
 
 import com.github.vladimirpokhodnya.playwrightgamebot.config.GameProperties;
 import com.microsoft.playwright.Browser;
@@ -14,13 +14,13 @@ import java.nio.file.Path;
 
 
 @Component
-public class GameLogin {
+public class GameLoginService {
 
     private final GameProperties properties;
     private final Playwright playwright;
     private final Path cookiesPath;
 
-    public GameLogin(GameProperties properties, Playwright playwright) {
+    public GameLoginService(GameProperties properties, Playwright playwright) {
         this.properties = properties;
         this.playwright = playwright;
         this.cookiesPath = Path.of(properties.getCookies());
